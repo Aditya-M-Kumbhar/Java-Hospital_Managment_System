@@ -9,7 +9,7 @@ public class Appointment {
     private final Doctor doctor;
     private final LocalDate date;
     private final LocalTime time;
-    private volatile AppointmentStatus status;   // volatile for thread visibility
+    private volatile AppointmentStatus status;
 
     public Appointment(int id, Patient patient, Doctor doctor, LocalDate date, LocalTime time) {
         this.id      = id;
@@ -20,15 +20,15 @@ public class Appointment {
         this.status  = AppointmentStatus.SCHEDULED;
     }
 
-    public int getId()               { return id; }
-    public Doctor getDoctor()        { return doctor; }
-    public LocalDate getDate()       { return date; }
-    public LocalTime getTime()       { return time; }
+    public int getId()                   { return id; }
+    public Doctor getDoctor()            { return doctor; }
+    public Patient getPatient()          { return patient; }
+    public LocalDate getDate()           { return date; }
+    public LocalTime getTime()           { return time; }
     public AppointmentStatus getStatus() { return status; }
+    public void setStatus(AppointmentStatus s) { this.status = s; }
 
-    public void setStatus(AppointmentStatus status) { this.status = status; }
-
-    /** Slot key used for conflict detection */
+    /** Unique key per doctor+date+time slot */
     public String slotKey() {
         return doctor.getId() + "_" + date + "_" + time;
     }

@@ -1,8 +1,8 @@
 package hospital.model;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 public class Patient extends Person {
     private final List<String> medicalHistory = new ArrayList<>();
@@ -11,9 +11,7 @@ public class Patient extends Person {
         super(id, name, phone);
     }
 
-    public void addHistory(String record) {
-        medicalHistory.add(record);
-    }
+    public void addHistory(String record) { medicalHistory.add(record); }
 
     public List<String> getMedicalHistory() {
         return Collections.unmodifiableList(medicalHistory);
@@ -21,6 +19,6 @@ public class Patient extends Person {
 
     @Override
     public void displayDetails() {
-        System.out.println("Patient  | ID: " + id + " | Name: " + name + " | Phone: " + phone);
+        System.out.printf("  Patient  | ID: %-3d | Name: %-20s | Phone: %s%n", id, name, phone);
     }
 }
