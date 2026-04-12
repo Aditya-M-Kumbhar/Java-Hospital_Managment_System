@@ -24,6 +24,6 @@ public class Patient extends Person {
 
     @Override
     public String toString() {
-        return "[ID: " + id + "] " + name;
+        return id + " - " + name;
     }
 }

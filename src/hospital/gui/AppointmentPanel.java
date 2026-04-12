@@ -139,20 +139,36 @@ public class AppointmentPanel extends JPanel {
     }
     
     private void refreshPatientCombo() {
-        patientCombo.removeAllItems();
-        List<Patient> patients = system.patients.getAll();
-        for (Patient p : patients) {
-            patientCombo.addItem(p);
+    Patient selected = (Patient) patientCombo.getSelectedItem();
+    patientCombo.removeAllItems();
+    for (Patient p : system.patients.getAll()) {
+        patientCombo.addItem(p);
+    }
+    if (selected != null) {
+        for (int i = 0; i < patientCombo.getItemCount(); i++) {
+            if (patientCombo.getItemAt(i).getId() == selected.getId()) {
+                patientCombo.setSelectedIndex(i);
+                break;
+            }
         }
     }
+}
     
     private void refreshDoctorCombo() {
-        doctorCombo.removeAllItems();
-        List<Doctor> doctors = system.doctors.getAll();
-        for (Doctor d : doctors) {
-            doctorCombo.addItem(d);
+    Doctor selected = (Doctor) doctorCombo.getSelectedItem();
+    doctorCombo.removeAllItems();
+    for (Doctor d : system.doctors.getAll()) {
+        doctorCombo.addItem(d);
+    }
+    if (selected != null) {
+        for (int i = 0; i < doctorCombo.getItemCount(); i++) {
+            if (doctorCombo.getItemAt(i).getId() == selected.getId()) {
+                doctorCombo.setSelectedIndex(i);
+                break;
+            }
         }
     }
+}
     
     private void bookAppointment() {
         refreshPatientCombo();

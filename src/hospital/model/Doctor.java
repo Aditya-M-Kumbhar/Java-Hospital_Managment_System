@@ -39,8 +39,13 @@ public class Doctor extends Person {
                 id, name, specialization, status);
     }
 
+    // @Override
+    // public String toString() {
+    //     return "[ID: " + id + "] Dr. " + name + " (" + specialization + ")";
+    // }
+
     @Override
     public String toString() {
-        return "[ID: " + id + "] Dr. " + name + " (" + specialization + ")";
+        return id + " - " + name + " (" + specialization + ")";
     }
 }

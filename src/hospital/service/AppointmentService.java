@@ -40,6 +40,12 @@ public class AppointmentService implements Schedulable {
                         "Dr. " + doc.getName() + " is unavailable on " + d + " (Surgery/Leave scheduled).");
             }
 
+            // Add this check after the blockedDate check
+            if (doc.getStatus() != DoctorStatus.AVAILABLE) {
+                throw new AppointmentConflictException(
+                "Dr. " + doc.getName() + " is currently unavailable. Status: " + doc.getStatus());
+            }
+
             // 2. Valid slot?
             if (!SlotManager.isValidSlot(t)) {
                 throw new AppointmentConflictException(
