@@ -38,4 +38,9 @@ public class Doctor extends Person {
         System.out.printf("  Doctor   | ID: %-3d | Name: %-20s | Spec: %-15s | Status: %s%n",
                 id, name, specialization, status);
     }
+
+    @Override
+    public String toString() {
+        return "[ID: " + id + "] Dr. " + name + " (" + specialization + ")";
+    }
 }

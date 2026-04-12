@@ -3,7 +3,7 @@ package hospital.main;
 import hospital.exception.HospitalException;
 import hospital.model.*;
 import hospital.service.*;
-import hospital.repository.Repository;
+import hospital.gui.HospitalGUI;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,7 +27,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("\n╔══════════════════════════════════════════╗");
-        System.out.println("║    HOSPITAL MANAGEMENT SYSTEM  v3.0     ║");
+        System.out.println("║    HOSPITAL MANAGEMENT SYSTEM  v3.0      ║");
         System.out.println("╚══════════════════════════════════════════╝");
 
         DataLoader.load(sys);  // pre-load 10 patients + 5 doctors
@@ -38,8 +38,9 @@ public class Main {
             System.out.println("  2. Doctor Menu");
             System.out.println("  3. Appointment Menu");
             System.out.println("  4. Billing");
-            System.out.println("  5. 🔴 Run Concurrent Booking Simulation");
-            System.out.println("  6. Exit");
+            System.out.println("  5. Run Concurrent Booking Simulation");
+            System.out.println("  6. Launch GUI");
+            System.out.println("  7. Exit");
             System.out.print("  Choice: ");
 
             switch (readInt()) {
@@ -48,7 +49,8 @@ public class Main {
                 case 3 -> appointmentMenu();
                 case 4 -> billingMenu();
                 case 5 -> runSimulation();
-                case 6 -> { System.out.println("\n  Goodbye! Stay healthy! 👋"); return; }
+                case 6 -> launchGUI();
+                case 7 -> { System.out.println("\n  Goodbye! Stay healthy!"); return; }
                 default -> System.out.println("  [ERROR] Invalid choice.");
             }
         }
@@ -71,7 +73,7 @@ public class Main {
                     System.out.print("  Name       : "); String name = sc.nextLine();
                     System.out.print("  Phone      : "); String phone = sc.nextLine();
                     sys.patients.add(new Patient(id, name, phone));
-                    System.out.println("  [✓] Patient added.");
+                    System.out.println("  [OK] Patient added.");
                 }
                 case 2 -> sys.patients.findAll().forEach(Patient::displayDetails);
                 case 3 -> { return; }
@@ -99,7 +101,7 @@ public class Main {
                     System.out.print("  Phone          : "); String phone = sc.nextLine();
                     System.out.print("  Specialization : "); String spec = sc.nextLine();
                     sys.doctors.add(new Doctor(id, name, phone, spec));
-                    System.out.println("  [✓] Doctor added.");
+                    System.out.println("  [OK] Doctor added.");
                 }
                 case 2 -> sys.doctors.findAll().forEach(Doctor::displayDetails);
                 case 3 -> updateDoctorStatus();
@@ -115,9 +117,9 @@ public class Main {
             System.out.println("  1. AVAILABLE  2. IN_SURGERY  3. ON_LEAVE");
             System.out.print("  Choose status: ");
             switch (readInt()) {
-                case 1 -> { doc.setStatus(DoctorStatus.AVAILABLE);  System.out.println("  [✓] Status: AVAILABLE"); }
-                case 2 -> { doc.setStatus(DoctorStatus.IN_SURGERY); System.out.println("  [✓] Status: IN_SURGERY"); }
-                case 3 -> { doc.setStatus(DoctorStatus.ON_LEAVE);   System.out.println("  [✓] Status: ON_LEAVE"); }
+                case 1 -> { doc.setStatus(DoctorStatus.AVAILABLE);  System.out.println("  [OK] Status: AVAILABLE"); }
+                case 2 -> { doc.setStatus(DoctorStatus.IN_SURGERY); System.out.println("  [OK] Status: IN_SURGERY"); }
+                case 3 -> { doc.setStatus(DoctorStatus.ON_LEAVE);   System.out.println("  [OK] Status: ON_LEAVE"); }
                 default -> System.out.println("  [ERROR] Invalid.");
             }
         }, () -> System.out.println("  [ERROR] Doctor not found."));
@@ -147,8 +149,8 @@ public class Main {
 
             if (chosen == null) { System.out.println("  [ERROR] Invalid choice."); return; }
 
-            doc.blockDate(chosen);  // synchronized method in Doctor
-            System.out.println("  [✓] Dr. " + doc.getName() + " blocked on " + chosen + " (Surgery/Leave).");
+            doc.blockDate(chosen);
+            System.out.println("  [OK] Dr. " + doc.getName() + " blocked on " + chosen + " (Surgery/Leave).");
         }, () -> System.out.println("  [ERROR] Doctor not found."));
     }
 
@@ -197,7 +199,7 @@ public class Main {
 
             for (int i = 1; i <= 3; i++) {
                 LocalDate date = today.plusDays(i);
-                System.out.println("\n  📅 " + date + (doc.isBlockedOn(date) ? " ── [DOCTOR UNAVAILABLE - Surgery/Leave]" : ""));
+                System.out.println("\n " + date + (doc.isBlockedOn(date) ? " ── [DOCTOR UNAVAILABLE - Surgery/Leave]" : ""));
 
                 if (doc.isBlockedOn(date)) continue;
 
@@ -295,7 +297,7 @@ public class Main {
     // ══════════════════════ SIMULATION ══════════════════════
 
     /**
-     * 🔴 The main showpiece — runs 6 patients trying to book the
+     * The main showpiece - runs 6 patients trying to book the
      * exact same slot at the exact same time using CountDownLatch.
      * ReentrantLock ensures only 1 wins.
      */
@@ -318,6 +320,13 @@ public class Main {
             sys.appointments.showByStatus(AppointmentStatus.SCHEDULED);
 
         }, () -> System.out.println("  [ERROR] Doctor not found."));
+    }
+
+    // ══════════════════════ LAUNCH GUI ══════════════════════
+
+    static void launchGUI() {
+        System.out.println("\n  Launching GUI...");
+        new HospitalGUI();
     }
 
     // ══════════════════════ INPUT HELPERS ══════════════════════

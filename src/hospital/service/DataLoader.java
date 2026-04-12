@@ -28,6 +28,6 @@ public class DataLoader {
         sys.patients.add(new Patient(9,  "Mohit Gupta",    "8888880009"));
         sys.patients.add(new Patient(10, "Kavya Reddy",    "8888880010"));
 
-        System.out.println("  [✓] Loaded 5 doctors and 10 patients into the system.");
+        System.out.println("  [OK] Loaded 5 doctors and 10 patients into the system.");
     }
 }

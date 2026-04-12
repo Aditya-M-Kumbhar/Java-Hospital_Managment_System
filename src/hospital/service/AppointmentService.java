@@ -28,7 +28,7 @@ public class AppointmentService implements Schedulable {
 
     @Override
     public void bookAppointment(Appointment appt) throws HospitalException {
-        lock.lock();  // 🔒 only one thread books at a time
+        lock.lock();
         try {
             Doctor doc  = appt.getDoctor();
             LocalDate d = appt.getDate();
@@ -57,12 +57,12 @@ public class AppointmentService implements Schedulable {
             }
 
             appointments.add(appt);
-            System.out.println("  [✓] Thread [" + Thread.currentThread().getName()
-                    + "] → Appointment #" + appt.getId() + " booked for "
+            System.out.println("  [OK] Thread [" + Thread.currentThread().getName()
+                    + "] -> Appointment #" + appt.getId() + " booked for "
                     + appt.getPatient().getName() + " with Dr. " + doc.getName()
                     + " on " + d + " at " + t);
         } finally {
-            lock.unlock();  // 🔓 always release
+            lock.unlock();
         }
     }
 
@@ -76,7 +76,7 @@ public class AppointmentService implements Schedulable {
                 return;
             }
             appt.setStatus(AppointmentStatus.CANCELLED);
-            System.out.println("  [✓] Appointment #" + id + " cancelled.");
+            System.out.println("  [OK] Appointment #" + id + " cancelled.");
         } finally {
             lock.unlock();
         }
@@ -86,7 +86,7 @@ public class AppointmentService implements Schedulable {
         lock.lock();
         try {
             findById(id).setStatus(AppointmentStatus.COMPLETED);
-            System.out.println("  [✓] Appointment #" + id + " marked as COMPLETED.");
+            System.out.println("  [OK] Appointment #" + id + " marked as COMPLETED.");
         } finally {
             lock.unlock();
         }
@@ -100,6 +100,11 @@ public class AppointmentService implements Schedulable {
                         && a.getStatus() == AppointmentStatus.SCHEDULED)
                 .map(Appointment::getTime)
                 .collect(Collectors.toList());
+    }
+
+    /** Returns all appointments */
+    public List<Appointment> getAll() {
+        return new ArrayList<>(appointments);
     }
 
     public void showAppointments() {

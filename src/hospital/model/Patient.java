@@ -21,4 +21,9 @@ public class Patient extends Person {
     public void displayDetails() {
         System.out.printf("  Patient  | ID: %-3d | Name: %-20s | Phone: %s%n", id, name, phone);
     }
+
+    @Override
+    public String toString() {
+        return "[ID: " + id + "] " + name;
+    }
 }

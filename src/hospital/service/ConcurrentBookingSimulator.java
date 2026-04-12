@@ -31,12 +31,12 @@ public class ConcurrentBookingSimulator {
 
     public int simulate(List<Patient> patients, Doctor doctor, LocalDate date, LocalTime time) {
         System.out.println("\n  ════════════════════════════════════════════════════");
-        System.out.println("  🔴 CONCURRENT BOOKING SIMULATION");
+        System.out.println("  CONCURRENT BOOKING SIMULATION");
         System.out.println("  " + patients.size() + " patients racing to book Dr. "
                 + doctor.getName() + " | " + date + " | " + time);
         System.out.println("  ════════════════════════════════════════════════════");
 
-        // CountDownLatch — all threads wait at the gate, then start together
+        // CountDownLatch - all threads wait at the gate, then start together
         CountDownLatch startGate = new CountDownLatch(1);
         List<Thread> threads = new ArrayList<>();
 
@@ -48,8 +48,8 @@ public class ConcurrentBookingSimulator {
                     Appointment appt = new Appointment(id, p, doctor, date, time);
                     sys.appointments.bookAppointment(appt);
                 } catch (HospitalException e) {
-                    System.out.println("  [✗] Thread [" + Thread.currentThread().getName()
-                            + "] → " + p.getName() + " FAILED: " + e.getMessage());
+                    System.out.println("  [FAIL] Thread [" + Thread.currentThread().getName()
+                            + "] -> " + p.getName() + " FAILED: " + e.getMessage());
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                 }
@@ -58,14 +58,14 @@ public class ConcurrentBookingSimulator {
         }
 
         threads.forEach(Thread::start);
-        startGate.countDown(); // 🚦 ALL threads released at same time
+        startGate.countDown(); // ALL threads released at same time
 
         threads.forEach(t -> {
             try { t.join(); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
         });
 
         System.out.println("  ════════════════════════════════════════════════════");
-        System.out.println("  ✅ Simulation complete. Only 1 booking should succeed.");
+        System.out.println("  Simulation complete. Only 1 booking should succeed.");
         System.out.println("  ════════════════════════════════════════════════════\n");
 
         return apptIdCounter;
